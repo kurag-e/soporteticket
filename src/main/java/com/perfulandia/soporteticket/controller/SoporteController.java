@@ -1,7 +1,5 @@
 package com.perfulandia.soporteticket.controller;
 
-import jakarta.persistence.*;
-import java.time.LocalDateTime;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,32 +19,32 @@ import java.util.List;
 @RequestMapping("/soporte")
 public class SoporteController {
     private final SoporteService soporteService;
-
+    
     public SoporteController(SoporteService soporteService) {
-        this.soporteService = soporteService;
-    }
+    this.soporteService = soporteService;
+}
 
     // 🔍 Obtener un soporte por ID
     @GetMapping("/{id_ticket}")
     public ResponseEntity<SoporteDTO> obtenerSoportePorId(@PathVariable Long id_ticket) {
-        return ResponseEntity.ok(soporteService.obtenerSoportePorId(id_ticket));
+    return ResponseEntity.ok(soporteService.obtenerSoportePorId(id_ticket));
     }
 
     // 📌 Obtener todos los soportes de un usuario
     @GetMapping("/usuario/{id_usuario}")
     public ResponseEntity<List<SoporteDTO>> obtenerSoportesPorUsuario(@PathVariable Long id_usuario) {
-        return ResponseEntity.ok(soporteService.obtenerSoportesPorUsuario(id_usuario));
+    return ResponseEntity.ok(soporteService.obtenerSoportesPorUsuario(id_usuario));
     }
 
     // ➕ Crear un nuevo soporte
     @PostMapping
     public ResponseEntity<SoporteDTO> crearSoporte(@RequestBody SoporteDTO soporteDTO) {
-        return ResponseEntity.ok(soporteService.crearSoporte(soporteDTO));
+    return ResponseEntity.ok(soporteService.crearSoporte(soporteDTO));
     }
 
     // ✏️ Actualizar el estado de un soporte
     @PutMapping("/{id_ticket}/estado")
     public ResponseEntity<SoporteDTO> actualizarEstado(@PathVariable Long id_ticket, @RequestParam String estado) {
-        return ResponseEntity.ok(soporteService.actualizarEstado(id_ticket, estado));
+    return ResponseEntity.ok(soporteService.actualizarEstado(id_ticket, estado));
     }
 }

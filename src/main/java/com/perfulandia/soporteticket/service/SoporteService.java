@@ -55,11 +55,6 @@ public class SoporteService {
         return convertirAsoporteDTO(soporte);
     }
 
-    // ❌ Eliminar un soporte por ID
-    public void eliminarSoporte(Long idTicket) {
-        soporteRepository.deleteById(idTicket);
-    }
-
     // 🔄 Método auxiliar para convertir Soporte a SoporteDTO
     private SoporteDTO convertirAsoporteDTO(Soporte soporte) {
         return new SoporteDTO(

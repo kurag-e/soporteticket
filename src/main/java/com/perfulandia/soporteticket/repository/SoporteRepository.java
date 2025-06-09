@@ -2,6 +2,7 @@ package com.perfulandia.soporteticket.repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -11,6 +12,7 @@ import com.perfulandia.soporteticket.model.Soporte;
 @Repository
 public interface SoporteRepository extends JpaRepository<Soporte, Long> {
 
+    Optional<Soporte> findById(Long idTicket);
     // 🔍 Buscar soportes por usuario
     List<Soporte> findByIdUsuario(Long idUsuario);
 
