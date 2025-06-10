@@ -14,9 +14,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.http.ResponseEntity;
 import java.util.List;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/soporte")
+@RequestMapping("/api/soporte")
 public class SoporteController {
     private final SoporteService soporteService;
     
@@ -24,25 +25,34 @@ public class SoporteController {
     this.soporteService = soporteService;
 }
 
-    // 🔍 Obtener un soporte por ID
+     @Autowired
+    private SoporteService service;
+
+    //obtener todos los tickets de soporte
+    @GetMapping
+    public ResponseEntity<List<SoporteDTO>> listar() {
+        return ResponseEntity.ok(service.listarTickets());
+    }
+
+    //obtener ticket por id
     @GetMapping("/{id_ticket}")
     public ResponseEntity<SoporteDTO> obtenerSoportePorId(@PathVariable Long id_ticket) {
     return ResponseEntity.ok(soporteService.obtenerSoportePorId(id_ticket));
     }
 
-    // 📌 Obtener todos los soportes de un usuario
+    //obtener los tickets de soporte por id de usuario
     @GetMapping("/usuario/{id_usuario}")
     public ResponseEntity<List<SoporteDTO>> obtenerSoportesPorUsuario(@PathVariable Long id_usuario) {
     return ResponseEntity.ok(soporteService.obtenerSoportesPorUsuario(id_usuario));
     }
 
-    // ➕ Crear un nuevo soporte
+    //crear nuevo ticket de soporte
     @PostMapping
     public ResponseEntity<SoporteDTO> crearSoporte(@RequestBody SoporteDTO soporteDTO) {
     return ResponseEntity.ok(soporteService.crearSoporte(soporteDTO));
     }
 
-    // ✏️ Actualizar el estado de un soporte
+    //actualizar estado de ticket de soporte
     @PutMapping("/{id_ticket}/estado")
     public ResponseEntity<SoporteDTO> actualizarEstado(@PathVariable Long id_ticket, @RequestParam String estado) {
     return ResponseEntity.ok(soporteService.actualizarEstado(id_ticket, estado));

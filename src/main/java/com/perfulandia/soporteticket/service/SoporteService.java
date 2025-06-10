@@ -16,14 +16,22 @@ public class SoporteService {
         this.soporteRepository = soporteRepository;
     }
 
-    // 🔍 Obtener soporte por ID
+
+    //obtener todos los tickets de soporte
+    public List<SoporteDTO> listarTickets() {
+    List<Soporte> tickets = soporteRepository.findAll();
+    return tickets.stream()
+            .map(this::convertirASoporteDTO)
+            .collect(Collectors.toList());
+}
+    //obtener ticket por id
     public SoporteDTO obtenerSoportePorId(Long idTicket) {
         Soporte soporte = soporteRepository.findById(idTicket)
                 .orElseThrow(() -> new RuntimeException("Soporte no encontrado"));
         return convertirAsoporteDTO(soporte);
     }
 
-    // 📌 Obtener todos los soportes de un usuario
+    //obtener los tickets de soporte por id de usuario
     public List<SoporteDTO> obtenerSoportesPorUsuario(Long idUsuario) {
         return soporteRepository.findByIdUsuario(idUsuario)
                 .stream()
@@ -31,7 +39,7 @@ public class SoporteService {
                 .collect(Collectors.toList());
     }
 
-    // ➕ Crear un nuevo soporte
+    //crear nuevo ticket de soporte
     public SoporteDTO crearSoporte(SoporteDTO soporteDTO) {
         Soporte soporte = new Soporte();
         soporte.setIdUsuario(soporteDTO.getIdUsuario());
@@ -43,7 +51,7 @@ public class SoporteService {
         return convertirAsoporteDTO(soporte);
     }
 
-    // ✏️ Actualizar el estado de un soporte
+    //actualizar estado de ticket de soporte
     public SoporteDTO actualizarEstado(Long idTicket, String nuevoEstado) {
         Soporte soporte = soporteRepository.findById(idTicket)
                 .orElseThrow(() -> new RuntimeException("Soporte no encontrado"));
@@ -55,7 +63,7 @@ public class SoporteService {
         return convertirAsoporteDTO(soporte);
     }
 
-    // 🔄 Método auxiliar para convertir Soporte a SoporteDTO
+    //método auxiliar para convertir Soporte a SoporteDTO
     private SoporteDTO convertirAsoporteDTO(Soporte soporte) {
         return new SoporteDTO(
                 soporte.getIdTicket(),
