@@ -13,12 +13,12 @@ import com.perfulandia.soporteticket.model.Soporte;
 public interface SoporteRepository extends JpaRepository<Soporte, Long> {
 
     Optional<Soporte> findById(Long idTicket);
-    // 🔍 Buscar soportes por usuario
+    //buscar ticket x usuario
     List<Soporte> findByIdUsuario(Long idUsuario);
 
-    // 📌 Filtrar por estado ("Abierto", "En progreso", "Resuelto")
+    //filtrar x estado ("Abierto", "En progreso", "Resuelto")
     List<Soporte> findByEstado(String estado);
 
-    // 📅 Buscar soportes creados en un rango de fechas
+    //buscar tickets creados en un rango de fechas
     List<Soporte> findByFechaCreacionBetween(LocalDateTime inicio, LocalDateTime fin);
 }
