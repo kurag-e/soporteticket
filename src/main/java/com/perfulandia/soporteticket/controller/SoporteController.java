@@ -1,4 +1,4 @@
-package com.perfulandia.soporteticket.controller; //v2
+package com.perfulandia.soporteticket.controller;
 
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
@@ -12,8 +12,8 @@ import com.perfulandia.soporteticket.service.SoporteService;
 
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.CollectionModel;
-
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
+
 
 @RestController
 @RequestMapping("/api/soporte")
@@ -25,14 +25,16 @@ public class SoporteController {
     //obtener todos los tickets
     @GetMapping
     public ResponseEntity<CollectionModel<EntityModel<SoporteDTO>>> listar() {
-        List<EntityModel<SoporteDTO>> modelos = service.listarTickets().stream()
-            .map(ticket -> EntityModel.of(ticket,
-                linkTo(methodOn(SoporteController.class).obtenerSoportePorId(ticket.getIdTicket())).withSelfRel()))
-            .collect(Collectors.toList());
+        List<SoporteDTO> tickets = service.listarTickets();
+
+        List<EntityModel<SoporteDTO>> modelos = tickets.stream()
+                .map(ticket -> EntityModel.of(ticket,
+                        linkTo(methodOn(SoporteController.class).obtenerSoportePorId(ticket.getIdTicket())).withSelfRel()))
+                .collect(Collectors.toList());
 
         return ResponseEntity.ok(
-            CollectionModel.of(modelos,
-                linkTo(methodOn(SoporteController.class).listar()).withSelfRel())
+                CollectionModel.of(modelos,
+                        linkTo(methodOn(SoporteController.class).listar()).withSelfRel())
         );
     }
 
@@ -41,22 +43,24 @@ public class SoporteController {
     public ResponseEntity<EntityModel<SoporteDTO>> obtenerSoportePorId(@PathVariable Long id_ticket) {
         SoporteDTO soporte = service.obtenerSoportePorId(id_ticket);
         EntityModel<SoporteDTO> modelo = EntityModel.of(soporte,
-            linkTo(methodOn(SoporteController.class).obtenerSoportePorId(id_ticket)).withSelfRel(),
-            linkTo(methodOn(SoporteController.class).listar()).withRel("todos"));
+                linkTo(methodOn(SoporteController.class).obtenerSoportePorId(id_ticket)).withSelfRel(),
+                linkTo(methodOn(SoporteController.class).listar()).withRel("todos"));
         return ResponseEntity.ok(modelo);
     }
 
     //tickets x usuario
     @GetMapping("/usuario/{id_usuario}")
     public ResponseEntity<CollectionModel<EntityModel<SoporteDTO>>> obtenerSoportesPorUsuario(@PathVariable Long id_usuario) {
-        List<EntityModel<SoporteDTO>> modelos = service.obtenerSoportesPorUsuario(id_usuario).stream()
-            .map(ticket -> EntityModel.of(ticket,
-                linkTo(methodOn(SoporteController.class).obtenerSoportePorId(ticket.getIdTicket())).withSelfRel()))
-            .collect(Collectors.toList());
+        List<SoporteDTO> tickets = service.obtenerSoportesPorUsuario(id_usuario);
+
+        List<EntityModel<SoporteDTO>> modelos = tickets.stream()
+                .map(ticket -> EntityModel.of(ticket,
+                        linkTo(methodOn(SoporteController.class).obtenerSoportePorId(ticket.getIdTicket())).withSelfRel()))
+                .collect(Collectors.toList());
 
         return ResponseEntity.ok(
-            CollectionModel.of(modelos,
-                linkTo(methodOn(SoporteController.class).obtenerSoportesPorUsuario(id_usuario)).withSelfRel())
+                CollectionModel.of(modelos,
+                        linkTo(methodOn(SoporteController.class).obtenerSoportesPorUsuario(id_usuario)).withSelfRel())
         );
     }
 
@@ -65,18 +69,18 @@ public class SoporteController {
     public ResponseEntity<EntityModel<SoporteDTO>> crearSoporte(@RequestBody SoporteDTO soporteDTO) {
         SoporteDTO creado = service.crearSoporte(soporteDTO);
         EntityModel<SoporteDTO> modelo = EntityModel.of(creado,
-            linkTo(methodOn(SoporteController.class).obtenerSoportePorId(creado.getIdTicket())).withSelfRel(),
-            linkTo(methodOn(SoporteController.class).listar()).withRel("todos"));
+                linkTo(methodOn(SoporteController.class).obtenerSoportePorId(creado.getIdTicket())).withSelfRel(),
+                linkTo(methodOn(SoporteController.class).listar()).withRel("todos"));
         return ResponseEntity.status(201).body(modelo);
     }
 
-    //actualizar estado
+    //actualizar estado de ticket
     @PutMapping("/{id_ticket}/estado")
     public ResponseEntity<EntityModel<SoporteDTO>> actualizarEstado(@PathVariable Long id_ticket, @RequestParam String estado) {
         SoporteDTO actualizado = service.actualizarEstado(id_ticket, estado);
         EntityModel<SoporteDTO> modelo = EntityModel.of(actualizado,
-            linkTo(methodOn(SoporteController.class).obtenerSoportePorId(id_ticket)).withSelfRel(),
-            linkTo(methodOn(SoporteController.class).listar()).withRel("todos"));
+                linkTo(methodOn(SoporteController.class).obtenerSoportePorId(id_ticket)).withSelfRel(),
+                linkTo(methodOn(SoporteController.class).listar()).withRel("todos"));
         return ResponseEntity.ok(modelo);
     }
 }
